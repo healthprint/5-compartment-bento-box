@@ -143,7 +143,7 @@
     }
     .bento-info-tag { text-align: right; }
     .bento-price-tag { 
-      font-size: 0.88rem; 
+      font-size: 0.92rem; 
       font-weight: 900; 
       color: var(--primary-orange); 
       line-height: 1.2; 
@@ -165,11 +165,11 @@
       background: var(--slot-bg); 
       border: 1px solid #EFE4CA; 
       border-radius: 10px; 
-      padding: 7px 8px; 
+      padding: 6px 8px; 
       gap: 8px; 
     }
     .slot-label { 
-      width: 82px; 
+      width: 74px; 
       flex-shrink: 0; 
       font-size: 0.72rem; 
       font-weight: 800; 
@@ -182,42 +182,68 @@
     .lbl-carb    { background: #FFF9C4; color: #F57F17; }
     .lbl-veggie  { background: #DCEDC8; color: #33691E; }
     .lbl-side    { background: #E1F5FE; color: #0277BD; }
+    .lbl-sauce   { background: #FCE4EC; color: #C2185B; }
     .lbl-custom  { background: #F3E5F5; color: #7B1FA2; }
+    
     .slot-dish-list { 
       flex: 1; 
       display: flex; 
       flex-direction: column; 
-      gap: 4px; 
+      gap: 3px; 
       min-width: 0; 
     }
-    /* 全面支援自動換行，文字過長自動折行顯示 */
     .slot-dish-item { 
-      font-size: 0.84rem; 
+      font-size: 0.81rem; 
       font-weight: 700; 
       color: var(--text-dark); 
       white-space: normal; 
       word-break: break-word; 
-      line-height: 1.38; 
+      line-height: 1.35; 
       display: flex; 
       align-items: flex-start; 
       justify-content: space-between; 
       gap: 4px; 
     }
-    .slot-dish-text {
-      flex: 1;
-    }
-    .slot-dish-tag {
+    .slot-dish-text { flex: 1; }
+    .slot-dish-tag { 
       font-size: 0.65rem; 
       color: #888; 
       white-space: nowrap; 
-      flex-shrink: 0;
-      margin-top: 1px;
+      flex-shrink: 0; 
+      margin-top: 1px; 
     }
     .slot-dish-item.empty { 
       color: #9E9E9E; 
       font-weight: normal; 
       font-size: 0.78rem; 
     }
+
+    /* 醬汁專用雙勾選行樣式 */
+    .sauce-item-check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      line-height: 1.35;
+      padding: 1px 0;
+    }
+    .sauce-item-check input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #D9531E;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .sauce-dish-name {
+      flex: 1;
+    }
+    .sauce-item-check.active .sauce-dish-name {
+      color: #B54512;
+    }
+
     .btn-reroll-cat { 
       background: none; 
       border: none; 
@@ -225,9 +251,10 @@
       color: #BDBDBD; 
       cursor: pointer; 
       padding: 0 4px; 
-      flex-shrink: 0;
+      flex-shrink: 0; 
     }
     .btn-reroll-cat:hover { color: var(--primary-orange); }
+
     .bento-stamps-bar { 
       margin-top: 10px; 
       padding-top: 9px; 
@@ -290,6 +317,7 @@
       </div>
     </div>
 
+    <!-- 主便當各格（連最底雙自選醬汁） -->
     <div class="slots-list" id="slotsList"></div>
 
     <div class="bento-stamps-bar">
@@ -311,7 +339,6 @@
   </div>
 
   <script>
-    // 你的專屬 Google 試算表 CSV 網址
     const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU-nsCAXl2JXcKafCqn-qLYDkHYbtZ9g4MMU4QBqeFO3ex0xQ5WjPzKDgiqgjAM02wID7FF16aoLbI/pub?output=csv";
 
     const DEFAULT_CONFIG = {
@@ -324,12 +351,24 @@
       { id: "cat_protein", title: "蛋白質", badgeClass: "lbl-protein", pickCount: 1, items: ["麻辣雞髀肉 (~200g) ($63) (360kcal)", "芥末雞胸 (~100g) ($66) (145kcal)", "香草雞柳 (~100g) ($58) (135kcal)", "醉橙鴨胸 (~100g) ($68) (210kcal)", "豆腐咖喱 (~200g) ($58) (185kcal)", "挪威三文魚(刁草檸檬) (~80g) ($68) (165kcal)"] },
       { id: "cat_carb", title: "碳水/蔬菜", badgeClass: "lbl-carb", pickCount: 1, items: ["藜麥飯 150g(可免費增量至250g) (215kcal)", "薑黃椰香飯 (~150g) (240kcal)", "香烤南瓜 (~180g) (85kcal)", "榴槤番薯 (~180g) (160kcal)", "椰菜花 (~180g) (45kcal)", "西蘭花 (~180g) (60kcal)"] },
       { id: "cat_veggie", title: "蔬菜(2款)", badgeClass: "lbl-veggie", pickCount: 2, items: ["西蘭花(檸檬橄欖油) (50g) (32kcal)", "椰菜花(味噌) (50g) (25kcal)", "豆類(蒜蓉) (50g) (22kcal)", "什菌(焦糖洋蔥) (50g) (28kcal)", "椰菜(蝦米) (50g) (26kcal)"] },
-      { id: "cat_side", title: "小菜", badgeClass: "lbl-side", pickCount: 1, items: ["昆布漬蘿蔔 (2片) (12kcal)", "麻藥蛋 (一隻) (78kcal)", "熟蛋 (半隻) (35kcal)"] }
+      { id: "cat_side", title: "小菜", badgeClass: "lbl-side", pickCount: 1, items: ["昆布漬蘿蔔 (2片) (12kcal)", "麻藥蛋 (一隻) (78kcal)", "熟蛋 (一隻) (70kcal)", "熟蛋 (半隻) (35kcal)"] }
+    ];
+
+    let sauceItems = [
+      "日式焙煎胡麻醬 (+$3) (65kcal)",
+      "低卡和風柚子醋 (+$3) (22kcal)",
+      "蜂蜜芥末醬 (+$3) (45kcal)",
+      "特製秘製辣汁 (+$3) (30kcal)",
+      "橄欖油檸檬汁 (+$3) (35kcal)"
     ];
 
     let siteConfig = { ...DEFAULT_CONFIG };
     let menuData = [...DEFAULT_MENU_DATA];
     let pickedResults = {};
+
+    // 醬汁雙選項及勾選狀態
+    let pickedSauces = []; 
+    let sauceCheckedState = [false, false];
 
     async function init() {
       const cached = localStorage.getItem("jzj_gsheet_cache");
@@ -338,6 +377,7 @@
           const parsed = JSON.parse(cached);
           if (parsed.menu) menuData = parsed.menu;
           if (parsed.config) siteConfig = parsed.config;
+          if (parsed.sauces) sauceItems = parsed.sauces;
         } catch(e) {}
       }
       applyConfig();
@@ -356,7 +396,7 @@
         const csvText = await res.text();
         parseCSV(csvText);
 
-        localStorage.setItem("jzj_gsheet_cache", JSON.stringify({ config: siteConfig, menu: menuData }));
+        localStorage.setItem("jzj_gsheet_cache", JSON.stringify({ config: siteConfig, menu: menuData, sauces: sauceItems }));
         applyConfig();
         renderBento();
         statusEl.innerHTML = `<span>☁️</span> <span>已同步最新</span>`;
@@ -371,6 +411,7 @@
 
       const map = {};
       const catOrder = [];
+      const parsedSauces = [];
 
       for (let i = 1; i < lines.length; i++) {
         const parts = lines[i].split(",");
@@ -390,6 +431,9 @@
         } else if (colA === "宣傳標語" || colA === "提示") {
           siteConfig.notice = colB;
           continue;
+        } else if (colA.includes("醬") || colA === "自選醬汁") {
+          parsedSauces.push(colB);
+          continue;
         }
 
         if (!map[colA]) {
@@ -397,6 +441,10 @@
           catOrder.push(colA);
         }
         map[colA].push(colB);
+      }
+
+      if (parsedSauces.length > 0) {
+        sauceItems = parsedSauces;
       }
 
       if (catOrder.length > 0) {
@@ -439,7 +487,6 @@
         siteConfig.logo.match(/\.(png|jpg|jpeg|svg|webp)/i)
       );
 
-      // Logo 高度加大至 52px，最大寬度 140px
       if (isImgUrl) {
         logoEl.innerHTML = `<img src="${siteConfig.logo}" alt="Logo" style="height:52px; max-width:140px; object-fit:contain; border-radius:6px; display:block;">`;
       } else {
@@ -451,10 +498,12 @@
       const container = document.getElementById("slotsList");
       container.innerHTML = "";
       let totalPicks = 0;
-      let calculatedPrice = null;
+      let calculatedBasePrice = 0;
+      let extraSaucePrice = 0;
       let totalCalories = 0;
       let hasCalories = false;
 
+      // 1. 渲染前 4 格（蛋白質、碳水、蔬菜、小菜）
       menuData.forEach((cat) => {
         totalPicks += cat.pickCount;
         const picked = pickedResults[cat.id] || [];
@@ -468,7 +517,7 @@
           contentHtml = picked.map((dish, i) => {
             const matchPrice = dish.match(/\$(\d+)/);
             if (matchPrice && (cat.title.includes('蛋白質') || cat.badgeClass === 'lbl-protein')) {
-              calculatedPrice = matchPrice[1];
+              calculatedBasePrice = parseInt(matchPrice[1], 10);
             }
 
             const matchCal = dish.match(/(\d+)\s*(kcal|卡|cal)/i);
@@ -494,9 +543,65 @@
         container.appendChild(row);
       });
 
-      document.getElementById("bentoTitleBadge").innerText = `🍱 五格自由砌 (共${totalPicks}品)`;
-      document.getElementById("bentoPriceTag").innerText = calculatedPrice ? `套餐總價：$${calculatedPrice}` : `套餐：$58起`;
+      // 2. 最底加一行：自選醬汁（有兩款，可各自勾選）
+      if (pickedSauces.length === 0) {
+        pickedSauces = pickRandomDishes(sauceItems, 2);
+      }
 
+      // 計算勾選醬汁的加購金額與卡路里
+      pickedSauces.forEach((sauce, idx) => {
+        if (sauceCheckedState[idx]) {
+          // 抓取醬汁價格 (+$3 或 +$5)
+          const matchPlus = sauce.match(/\+\$(\d+)/);
+          if (matchPlus) {
+            extraSaucePrice += parseInt(matchPlus[1], 10);
+          }
+          // 抓取醬汁卡路里
+          const matchCal = sauce.match(/(\d+)\s*(kcal|卡|cal)/i);
+          if (matchCal) {
+            totalCalories += parseInt(matchCal[1], 10);
+            hasCalories = true;
+          }
+        }
+      });
+
+      const sauceRow = document.createElement("div");
+      sauceRow.className = "slot-row";
+      sauceRow.style.background = "#FFFDFE";
+      sauceRow.style.borderColor = "#F8BBD0";
+
+      let sauceContentHtml = pickedSauces.map((sauce, idx) => {
+        const isChecked = sauceCheckedState[idx] ? 'checked' : '';
+        const activeClass = sauceCheckedState[idx] ? 'active' : '';
+        return `
+          <label class="sauce-item-check ${activeClass}">
+            <input type="checkbox" ${isChecked} onchange="toggleSauceCheck(${idx}, this.checked)">
+            <span class="sauce-dish-name">${sauce}</span>
+            <span style="font-size:0.62rem; color:#C2185B;">(選配)</span>
+          </label>
+        `;
+      }).join("");
+
+      sauceRow.innerHTML = `
+        <div class="slot-label lbl-sauce">自選醬汁</div>
+        <div class="slot-dish-list">${sauceContentHtml}</div>
+        <button class="btn-reroll-cat" onclick="rerollSauceRow()" title="單獨重抽醬汁">🔄</button>
+      `;
+      container.appendChild(sauceRow);
+
+      // 3. 計算總價
+      const finalPrice = calculatedBasePrice > 0 ? (calculatedBasePrice + extraSaucePrice) : null;
+      document.getElementById("bentoTitleBadge").innerText = `🍱 五格自由砌 (共${totalPicks}品)`;
+      
+      if (finalPrice) {
+        let priceText = `套餐總價：$${finalPrice}`;
+        if (extraSaucePrice > 0) priceText += ` (含醬汁+$${extraSaucePrice})`;
+        document.getElementById("bentoPriceTag").innerText = priceText;
+      } else {
+        document.getElementById("bentoPriceTag").innerText = `套餐：$58起`;
+      }
+
+      // 4. 計算總卡路里
       const calTag = document.getElementById("bentoCalorieTag");
       if (hasCalories && totalCalories > 0) {
         calTag.style.display = "block";
@@ -506,10 +611,22 @@
       }
     }
 
+    function toggleSauceCheck(index, isChecked) {
+      sauceCheckedState[index] = isChecked;
+      renderBento();
+    }
+
+    function rerollSauceRow() {
+      pickedSauces = pickRandomDishes(sauceItems, 2);
+      renderBento();
+    }
+
     function drawAllDishes() {
       menuData.forEach(cat => {
         pickedResults[cat.id] = pickRandomDishes(cat.items, cat.pickCount);
       });
+      pickedSauces = pickRandomDishes(sauceItems, 2);
+      // 抽籤時預設不強制勾選，由客人自主決定打勾
       renderBento();
       if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin: { y: 0.3 } });
     }
@@ -522,7 +639,7 @@
     }
 
     function pickRandomDishes(items, count) {
-      if (!items || items.length === 0) return ["(暫無菜式)"];
+      if (!items || items.length === 0) return ["(暫無可選)"];
       const shuffled = [...items].sort(() => 0.5 - Math.random());
       return shuffled.slice(0, Math.min(count, items.length));
     }
@@ -531,6 +648,8 @@
       let text = `🍱 ${siteConfig.title}·今日落單：\n`;
       let hasItem = false;
       let totalCalories = 0;
+      let basePrice = 0;
+      let saucePrice = 0;
 
       menuData.forEach(cat => {
         const picked = pickedResults[cat.id];
@@ -538,13 +657,44 @@
           hasItem = true;
           text += `▪️ ${cat.title}：${picked.join(" ＋ ")}\n`;
           picked.forEach(dish => {
+            const matchPrice = dish.match(/\$(\d+)/);
+            if (matchPrice && (cat.title.includes('蛋白質') || cat.badgeClass === 'lbl-protein')) {
+              basePrice = parseInt(matchPrice[1], 10);
+            }
             const matchCal = dish.match(/(\d+)\s*(kcal|卡|cal)/i);
             if (matchCal) totalCalories += parseInt(matchCal[1], 10);
           });
         }
       });
+
       if (!hasItem) { alert("請先撳「🎲 隨機抽今日餐單！」抽取菜式！"); return; }
-      if (totalCalories > 0) text += `🔥 總卡路里：約 ${totalCalories} kcal\n`;
+
+      // 檢查醬汁勾選情況
+      const chosenSauces = [];
+      pickedSauces.forEach((sauce, idx) => {
+        if (sauceCheckedState[idx]) {
+          chosenSauces.push(sauce);
+          const matchPlus = sauce.match(/\+\$(\d+)/);
+          if (matchPlus) saucePrice += parseInt(matchPlus[1], 10);
+          const matchCal = sauce.match(/(\d+)\s*(kcal|卡|cal)/i);
+          if (matchCal) totalCalories += parseInt(matchCal[1], 10);
+        }
+      });
+
+      if (chosenSauces.length > 0) {
+        text += `▪️ 加選醬汁：${chosenSauces.join(" ＋ ")}\n`;
+      } else {
+        text += `▪️ 加選醬汁：不需要醬汁\n`;
+      }
+
+      if (basePrice > 0) {
+        const finalP = basePrice + saucePrice;
+        text += `💰 套餐總額：$${finalP}${saucePrice > 0 ? ` (含醬汁+$${saucePrice})` : ''}\n`;
+      }
+
+      if (totalCalories > 0) {
+        text += `🔥 總卡路里：約 ${totalCalories} kcal\n`;
+      }
 
       navigator.clipboard.writeText(text).then(() => alert("✅ 餐單文字已複製到剪貼簿！"));
     }
