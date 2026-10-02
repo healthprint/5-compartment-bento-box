@@ -182,8 +182,7 @@
     .lbl-carb    { background: #FFF9C4; color: #F57F17; }
     .lbl-veggie  { background: #DCEDC8; color: #33691E; }
     .lbl-side    { background: #E1F5FE; color: #0277BD; }
-    .lbl-sauce   { background: #FCE4EC; color: #C2185B; }
-    .lbl-custom  { background: #F3E5F5; color: #7B1FA2; }
+    .lbl-sauce   { background: #F3E5F5; color: #7B1FA2; }
     
     .slot-dish-list { 
       flex: 1; 
@@ -218,30 +217,36 @@
       font-size: 0.78rem; 
     }
 
-    /* 醬汁專用雙勾選行樣式 */
-    .sauce-item-check {
+    /* 醬汁專屬可剔選框樣式 */
+    .sauce-option-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
       font-size: 0.8rem;
       font-weight: 700;
       color: var(--text-dark);
       cursor: pointer;
       line-height: 1.35;
-      padding: 1px 0;
+      padding: 2px 0;
+      user-select: none;
     }
-    .sauce-item-check input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: #D9531E;
+    .sauce-checkbox {
+      width: 17px;
+      height: 17px;
+      accent-color: #7B1FA2;
       cursor: pointer;
       flex-shrink: 0;
     }
-    .sauce-dish-name {
+    .sauce-text {
       flex: 1;
     }
-    .sauce-item-check.active .sauce-dish-name {
-      color: #B54512;
+    .sauce-hint {
+      font-size: 0.62rem;
+      color: #7B1FA2;
+      background: #F3E5F5;
+      padding: 1px 5px;
+      border-radius: 4px;
+      flex-shrink: 0;
     }
 
     .btn-reroll-cat { 
@@ -317,7 +322,7 @@
       </div>
     </div>
 
-    <!-- 主便當各格（連最底雙自選醬汁） -->
+    <!-- 主便當各格（含最底自選醬汁可剔選） -->
     <div class="slots-list" id="slotsList"></div>
 
     <div class="bento-stamps-bar">
@@ -366,8 +371,8 @@
     let menuData = [...DEFAULT_MENU_DATA];
     let pickedResults = {};
 
-    // 醬汁雙選項及勾選狀態
-    let pickedSauces = []; 
+    // 醬汁隨機 2 款，客人自選勾選
+    let pickedSauces = [];
     let sauceCheckedState = [false, false];
 
     async function init() {
@@ -431,7 +436,8 @@
         } else if (colA === "宣傳標語" || colA === "提示") {
           siteConfig.notice = colB;
           continue;
-        } else if (colA.includes("醬") || colA === "自選醬汁") {
+        } else if (colA.includes("醬") || colA.includes("秘製") || colA.includes("追加")) {
+          // 自動識別為自選醬汁庫
           parsedSauces.push(colB);
           continue;
         }
@@ -503,7 +509,7 @@
       let totalCalories = 0;
       let hasCalories = false;
 
-      // 1. 渲染前 4 格（蛋白質、碳水、蔬菜、小菜）
+      // 1. 渲染前 4 格（便當固定 5 品）
       menuData.forEach((cat) => {
         totalPicks += cat.pickCount;
         const picked = pickedResults[cat.id] || [];
@@ -543,20 +549,18 @@
         container.appendChild(row);
       });
 
-      // 2. 最底加一行：自選醬汁（有兩款，可各自勾選）
-      if (pickedSauces.length === 0) {
-        pickedSauces = pickRandomDishes(sauceItems, 2);
+      // 2. 渲染最底：「追加秘製醬汁」（提供 2 款，客人可剔可唔剔）
+      if (pickedSauces.length === 0 && sauceItems.length > 0) {
+        pickedSauces = pickRandomDishes(sauceItems, Math.min(2, sauceItems.length));
       }
 
-      // 計算勾選醬汁的加購金額與卡路里
+      // 計算勾選醬汁嘅價錢同卡路里
       pickedSauces.forEach((sauce, idx) => {
         if (sauceCheckedState[idx]) {
-          // 抓取醬汁價格 (+$3 或 +$5)
           const matchPlus = sauce.match(/\+\$(\d+)/);
           if (matchPlus) {
             extraSaucePrice += parseInt(matchPlus[1], 10);
           }
-          // 抓取醬汁卡路里
           const matchCal = sauce.match(/(\d+)\s*(kcal|卡|cal)/i);
           if (matchCal) {
             totalCalories += parseInt(matchCal[1], 10);
@@ -568,30 +572,34 @@
       const sauceRow = document.createElement("div");
       sauceRow.className = "slot-row";
       sauceRow.style.background = "#FFFDFE";
-      sauceRow.style.borderColor = "#F8BBD0";
+      sauceRow.style.borderColor = "#E1BEE7";
 
-      let sauceContentHtml = pickedSauces.map((sauce, idx) => {
-        const isChecked = sauceCheckedState[idx] ? 'checked' : '';
-        const activeClass = sauceCheckedState[idx] ? 'active' : '';
-        return `
-          <label class="sauce-item-check ${activeClass}">
-            <input type="checkbox" ${isChecked} onchange="toggleSauceCheck(${idx}, this.checked)">
-            <span class="sauce-dish-name">${sauce}</span>
-            <span style="font-size:0.62rem; color:#C2185B;">(選配)</span>
-          </label>
-        `;
-      }).join("");
+      let sauceContentHtml = "";
+      if (pickedSauces.length === 0) {
+        sauceContentHtml = `<div class="slot-dish-item empty">請按上方按鈕隨機抽取</div>`;
+      } else {
+        sauceContentHtml = pickedSauces.map((sauce, idx) => {
+          const isChecked = sauceCheckedState[idx] ? 'checked' : '';
+          return `
+            <label class="sauce-option-item">
+              <input type="checkbox" class="sauce-checkbox" ${isChecked} onchange="toggleSauceCheck(${idx}, this.checked)">
+              <span class="sauce-text">${sauce}</span>
+              <span class="sauce-hint">可剔選</span>
+            </label>
+          `;
+        }).join("");
+      }
 
       sauceRow.innerHTML = `
-        <div class="slot-label lbl-sauce">自選醬汁</div>
+        <div class="slot-label lbl-sauce">追加秘製醬汁</div>
         <div class="slot-dish-list">${sauceContentHtml}</div>
         <button class="btn-reroll-cat" onclick="rerollSauceRow()" title="單獨重抽醬汁">🔄</button>
       `;
       container.appendChild(sauceRow);
 
-      // 3. 計算總價
+      // 3. 套餐總價計算
       const finalPrice = calculatedBasePrice > 0 ? (calculatedBasePrice + extraSaucePrice) : null;
-      document.getElementById("bentoTitleBadge").innerText = `🍱 五格自由砌 (共${totalPicks}品)`;
+      document.getElementById("bentoTitleBadge").innerText = `🍱 五格自由砌 (共5品)`;
       
       if (finalPrice) {
         let priceText = `套餐總價：$${finalPrice}`;
@@ -601,7 +609,7 @@
         document.getElementById("bentoPriceTag").innerText = `套餐：$58起`;
       }
 
-      // 4. 計算總卡路里
+      // 4. 總卡路里顯示
       const calTag = document.getElementById("bentoCalorieTag");
       if (hasCalories && totalCalories > 0) {
         calTag.style.display = "block";
@@ -617,7 +625,8 @@
     }
 
     function rerollSauceRow() {
-      pickedSauces = pickRandomDishes(sauceItems, 2);
+      pickedSauces = pickRandomDishes(sauceItems, Math.min(2, sauceItems.length));
+      sauceCheckedState = [false, false]; // 重抽時還原未勾選
       renderBento();
     }
 
@@ -625,8 +634,8 @@
       menuData.forEach(cat => {
         pickedResults[cat.id] = pickRandomDishes(cat.items, cat.pickCount);
       });
-      pickedSauces = pickRandomDishes(sauceItems, 2);
-      // 抽籤時預設不強制勾選，由客人自主決定打勾
+      pickedSauces = pickRandomDishes(sauceItems, Math.min(2, sauceItems.length));
+      sauceCheckedState = [false, false]; // 抽今日餐單時預設不強制勾選
       renderBento();
       if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin: { y: 0.3 } });
     }
@@ -669,7 +678,7 @@
 
       if (!hasItem) { alert("請先撳「🎲 隨機抽今日餐單！」抽取菜式！"); return; }
 
-      // 檢查醬汁勾選情況
+      // 檢查醬汁勾選
       const chosenSauces = [];
       pickedSauces.forEach((sauce, idx) => {
         if (sauceCheckedState[idx]) {
@@ -682,9 +691,9 @@
       });
 
       if (chosenSauces.length > 0) {
-        text += `▪️ 加選醬汁：${chosenSauces.join(" ＋ ")}\n`;
+        text += `▪️ 追加秘製醬汁：${chosenSauces.join(" ＋ ")}\n`;
       } else {
-        text += `▪️ 加選醬汁：不需要醬汁\n`;
+        text += `▪️ 追加秘製醬汁：不需要醬汁\n`;
       }
 
       if (basePrice > 0) {
