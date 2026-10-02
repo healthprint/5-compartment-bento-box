@@ -20,7 +20,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang HK", "Microsoft JhengHei", sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-cream); color: var(--text-dark); padding: 10px 12px 36px 12px; display: flex; flex-direction: column; align-items: center; }
     header { width: 100%; max-width: 460px; display: flex; justify-content: space-between; align-items: center; padding: 4px 2px 8px 2px; }
-    .brand-logo { display: flex; align-items: center; gap: 7px; }
+    .brand-logo { display: flex; align-items: center; gap: 8px; }
     .brand-logo h1 { font-size: 1.35rem; font-weight: 900; color: var(--primary-orange); letter-spacing: 0.5px; }
     .cloud-status { font-size: 0.68rem; padding: 3px 8px; border-radius: 12px; background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; font-weight: 700; display: flex; align-items: center; gap: 3px; }
     .cap-notice-banner { width: 100%; max-width: 460px; background: #FFF1DF; border: 1px solid #F8D2B0; color: #B54512; font-size: 0.78rem; font-weight: 700; padding: 7px 10px; border-radius: 10px; text-align: center; margin-bottom: 8px; }
@@ -61,7 +61,7 @@
 
   <header>
     <div class="brand-logo">
-      <span id="siteLogo" style="font-size:1.4rem;">🥕</span>
+      <span id="siteLogo" style="display:flex; align-items:center;">🥕</span>
       <h1 id="siteTitle">健築家 健康五格自由砌</h1>
     </div>
     <div class="cloud-status" id="cloudStatus">
@@ -161,7 +161,7 @@
         renderBento();
         statusEl.innerHTML = `<span>☁️</span> <span>已同步最新</span>`;
       } catch (e) {
-        statusEl.innerHTML = `<span>☁️️</span> <span>離線菜單</span>`;
+        statusEl.innerHTML = `<span>☁️</span> <span>離線菜單</span>`;
       }
     }
 
@@ -184,7 +184,7 @@
         if (colA === "店舖名稱" || colA === "店名") {
           siteConfig.title = colB;
           continue;
-        } else if (colA === "店舖圖標" || colA === "Logo" || colA === "logo") {
+        } else if (colA === "店舖圖標" || colA === "Logo" || colA === "logo" || colA === "商標") {
           siteConfig.logo = colB;
           continue;
         } else if (colA === "宣傳標語" || colA === "提示") {
@@ -230,8 +230,21 @@
     function applyConfig() {
       document.title = siteConfig.title;
       document.getElementById("siteTitle").innerText = siteConfig.title;
-      document.getElementById("siteLogo").innerText = siteConfig.logo;
       document.getElementById("siteNotice").innerText = siteConfig.notice;
+
+      const logoEl = document.getElementById("siteLogo");
+      // 智能偵測：若是 http 網址或包含 logo / 圖片副檔名，以 <img> 標籤載入
+      const isImgUrl = siteConfig.logo && (
+        siteConfig.logo.startsWith("http") || 
+        siteConfig.logo.includes("/logo") || 
+        siteConfig.logo.match(/\.(png|jpg|jpeg|svg|webp)/i)
+      );
+
+      if (isImgUrl) {
+        logoEl.innerHTML = `<img src="${siteConfig.logo}" alt="Logo" style="height:36px; max-width:110px; object-fit:contain; border-radius:6px; display:block;">`;
+      } else {
+        logoEl.innerText = siteConfig.logo || "🥕";
+      }
     }
 
     function renderBento() {
@@ -253,13 +266,11 @@
           contentHtml = `<div class="slot-dish-item empty">請按上方按鈕隨機抽取</div>`;
         } else {
           contentHtml = picked.map((dish, i) => {
-            // 偵測價格
             const matchPrice = dish.match(/\$(\d+)/);
             if (matchPrice && (cat.title.includes('蛋白質') || cat.badgeClass === 'lbl-protein')) {
               calculatedPrice = matchPrice[1];
             }
 
-            // 智能偵測卡路里: 支援 (320kcal) / (320卡) / 320 kcal
             const matchCal = dish.match(/(\d+)\s*(kcal|卡|cal)/i);
             if (matchCal) {
               totalCalories += parseInt(matchCal[1], 10);
@@ -286,7 +297,6 @@
       document.getElementById("bentoTitleBadge").innerText = `🍱 五格自由砌 (共${totalPicks}品)`;
       document.getElementById("bentoPriceTag").innerText = calculatedPrice ? `套餐總價：$${calculatedPrice}` : `套餐：$58起`;
 
-      // 顯示總卡路里
       const calTag = document.getElementById("bentoCalorieTag");
       if (hasCalories && totalCalories > 0) {
         calTag.style.display = "block";
