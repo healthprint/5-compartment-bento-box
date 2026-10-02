@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>健築家 - 健康五格自由砌</title>
-  <!-- 引入輕量彩帶特效庫 -->
+  <title>健築家 健康五格自由砌</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
       --bg-cream: #FAF5E8;
       --paper-bg: #FFFFFF;
       --primary-orange: #D9531E;
-      --secondary-orange: #E66832;
-      --veggie-green: #2E7D32;
       --text-dark: #2A2521;
       --text-muted: #756D65;
       --border-color: #E6DCBF;
@@ -20,466 +17,62 @@
       --radius: 16px;
       --shadow: 0 4px 18px rgba(160, 110, 50, 0.08);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang HK", "Microsoft JhengHei", sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-cream);
-      color: var(--text-dark);
-      padding: 10px 12px 36px 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* 頂部 Header */
-    header {
-      width: 100%;
-      max-width: 460px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 2px 8px 2px;
-    }
-
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .brand-logo h1 {
-      font-size: 1.35rem;
-      font-weight: 900;
-      color: var(--primary-orange);
-      letter-spacing: 0.5px;
-      line-height: 1.2;
-    }
-
-    .brand-tagline {
-      font-size: 0.75rem;
-      color: #388E3C;
-      font-weight: 700;
-    }
-
-    .btn-admin-pill {
-      background: #EFE4CA;
-      border: 1px solid #D6C4A2;
-      color: #634C2B;
-      padding: 4px 10px;
-      border-radius: 16px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* 截圖落單提示橫額 */
-    .cap-notice-banner {
-      width: 100%;
-      max-width: 460px;
-      background: #FFF1DF;
-      border: 1px solid #F8D2B0;
-      color: #B54512;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 7px 10px;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    /* 主抽籤按鈕區 */
-    .controls-wrapper {
-      width: 100%;
-      max-width: 460px;
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .btn-draw-large {
-      flex: 2;
-      background: linear-gradient(135deg, #E65C00 0%, #D84315 100%);
-      color: white;
-      border: none;
-      font-size: 1.05rem;
-      font-weight: 800;
-      padding: 12px 10px;
-      border-radius: 26px;
-      box-shadow: 0 4px 14px rgba(216, 67, 21, 0.35);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang HK", "Microsoft JhengHei", sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg-cream); color: var(--text-dark); padding: 10px 12px 36px 12px; display: flex; flex-direction: column; align-items: center; }
+    header { width: 100%; max-width: 460px; display: flex; justify-content: space-between; align-items: center; padding: 4px 2px 8px 2px; }
+    .brand-logo { display: flex; align-items: center; gap: 7px; }
+    .brand-logo h1 { font-size: 1.35rem; font-weight: 900; color: var(--primary-orange); letter-spacing: 0.5px; }
+    .cloud-status { font-size: 0.68rem; padding: 3px 8px; border-radius: 12px; background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; font-weight: 700; display: flex; align-items: center; gap: 3px; }
+    .cap-notice-banner { width: 100%; max-width: 460px; background: #FFF1DF; border: 1px solid #F8D2B0; color: #B54512; font-size: 0.78rem; font-weight: 700; padding: 7px 10px; border-radius: 10px; text-align: center; margin-bottom: 8px; }
+    .controls-wrapper { width: 100%; max-width: 460px; display: flex; gap: 8px; margin-bottom: 10px; }
+    .btn-draw-large { flex: 2; background: linear-gradient(135deg, #E65C00 0%, #D84315 100%); color: white; border: none; font-size: 1.05rem; font-weight: 800; padding: 12px 10px; border-radius: 26px; box-shadow: 0 4px 14px rgba(216, 67, 21, 0.35); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .btn-draw-large:active { transform: scale(0.98); }
-
-    .btn-copy-small {
-      flex: 1;
-      background: #FFFFFF;
-      border: 1.5px solid var(--primary-orange);
-      color: var(--primary-orange);
-      font-size: 0.8rem;
-      font-weight: 700;
-      border-radius: 26px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-
-    /* 🍱 便當盒卡片：手機一屏專用截圖容器 */
-    .bento-card {
-      width: 100%;
-      max-width: 460px;
-      background: var(--paper-bg);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 11px 12px;
-    }
-
-    .bento-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 8px;
-      margin-bottom: 8px;
-      border-bottom: 1.5px dashed var(--border-color);
-    }
-
-    .bento-badge {
-      background: #E8F5E9;
-      color: #2E7D32;
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 12px;
-      border: 1px solid #C8E6C9;
-    }
-
-    .bento-price-tag {
-      font-size: 0.85rem;
-      font-weight: 900;
-      color: var(--primary-orange);
-    }
-
-    /* 分類列表容器 */
-    .slots-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .slot-row {
-      display: flex;
-      align-items: center;
-      background: var(--slot-bg);
-      border: 1px solid #EFE4CA;
-      border-radius: 10px;
-      padding: 6px 8px;
-      gap: 8px;
-    }
-
-    .slot-label {
-      width: 82px;
-      flex-shrink: 0;
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-align: center;
-      padding: 3px 0;
-      border-radius: 6px;
-      line-height: 1.2;
-    }
+    .btn-copy-small { flex: 1; background: #FFFFFF; border: 1.5px solid var(--primary-orange); color: var(--primary-orange); font-size: 0.8rem; font-weight: 700; border-radius: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .bento-card { width: 100%; max-width: 460px; background: var(--paper-bg); border: 2px solid var(--border-color); border-radius: var(--radius); box-shadow: var(--shadow); padding: 11px 12px; }
+    .bento-header { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1.5px dashed var(--border-color); }
+    .bento-badge { background: #E8F5E9; color: #2E7D32; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 12px; border: 1px solid #C8E6C9; }
+    .bento-info-tag { text-align: right; }
+    .bento-price-tag { font-size: 0.88rem; font-weight: 900; color: var(--primary-orange); line-height: 1.2; }
+    .bento-calorie-tag { font-size: 0.75rem; font-weight: 800; color: #E65100; margin-top: 2px; }
+    .slots-list { display: flex; flex-direction: column; gap: 6px; }
+    .slot-row { display: flex; align-items: center; background: var(--slot-bg); border: 1px solid #EFE4CA; border-radius: 10px; padding: 6px 8px; gap: 8px; }
+    .slot-label { width: 84px; flex-shrink: 0; font-size: 0.72rem; font-weight: 800; text-align: center; padding: 3px 0; border-radius: 6px; line-height: 1.2; }
     .lbl-protein { background: #FFE0B2; color: #BF360C; }
     .lbl-carb    { background: #FFF9C4; color: #F57F17; }
     .lbl-veggie  { background: #DCEDC8; color: #33691E; }
     .lbl-side    { background: #E1F5FE; color: #0277BD; }
     .lbl-custom  { background: #F3E5F5; color: #7B1FA2; }
-
-    .slot-dish-list {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      min-width: 0;
-    }
-
-    .slot-dish-item {
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--text-dark);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .slot-dish-item.empty {
-      color: #9E9E9E;
-      font-weight: normal;
-      font-size: 0.78rem;
-    }
-
-    .btn-reroll-cat {
-      background: none;
-      border: none;
-      font-size: 0.95rem;
-      color: #BDBDBD;
-      cursor: pointer;
-      padding: 0 4px;
-    }
+    .slot-dish-list { flex: 1; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .slot-dish-item { font-size: 0.84rem; font-weight: 700; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: space-between; }
+    .slot-dish-item.empty { color: #9E9E9E; font-weight: normal; font-size: 0.78rem; }
+    .btn-reroll-cat { background: none; border: none; font-size: 0.95rem; color: #BDBDBD; cursor: pointer; padding: 0 4px; }
     .btn-reroll-cat:hover { color: var(--primary-orange); }
-
-    /* 傳單同款三圓章橫列 */
-    .bento-stamps-bar {
-      margin-top: 10px;
-      padding-top: 9px;
-      border-top: 1px dotted var(--border-color);
-      display: grid;
-      grid-template-columns: 1fr 1.25fr 1fr;
-      gap: 5px;
-      align-items: center;
-    }
-
-    .stamp-box {
-      border-radius: 8px;
-      padding: 4px 2px;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .stamp-left {
-      background: #FFF5EE;
-      color: #C0392B;
-      font-size: 0.68rem;
-      line-height: 1.2;
-    }
-
-    .stamp-mid {
-      background: #F1F8F1;
-      border: 1px solid #D4ECD5;
-      padding: 3px 2px;
-    }
-    .stamp-mid-top {
-      font-size: 0.62rem;
-      color: #4B6F44;
-      line-height: 1.15;
-    }
-    .stamp-mid-bot {
-      font-size: 0.75rem;
-      font-weight: 900;
-      color: #1B5E20;
-      line-height: 1.15;
-    }
-
-    .stamp-right {
-      background: #FFFDF0;
-      color: #8D6E63;
-      font-size: 0.68rem;
-      line-height: 1.2;
-    }
-
-    /* 唯讀提示 */
-    .visitor-lock-hint {
-      font-size: 0.72rem;
-      color: #8C7853;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    /* 管理員後台面板 */
-    .admin-container {
-      width: 100%;
-      max-width: 460px;
-      background: white;
-      border-radius: var(--radius);
-      border: 1.5px dashed #FF9800;
-      padding: 14px;
-      margin-top: 14px;
-    }
-
-    .admin-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #EEE;
-    }
-    .admin-head h3 {
-      font-size: 0.92rem;
-      color: #B26A00;
-      font-weight: 800;
-    }
-
-    .cat-admin-card {
-      background: #FAF8F2;
-      border: 1px solid #EADBBA;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-    .cat-admin-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .cat-admin-top strong {
-      font-size: 0.85rem;
-      color: #333;
-    }
-
-    .select-pick-count {
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid #CCC;
-      font-size: 0.75rem;
-      background: white;
-      font-weight: bold;
-    }
-
-    .dish-tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 6px;
-    }
-    .dish-tag {
-      background: white;
-      border: 1px solid #DDD;
-      padding: 2px 6px;
-      border-radius: 12px;
-      font-size: 0.72rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .dish-tag button {
-      border: none;
-      background: none;
-      color: #E53935;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .add-dish-line {
-      display: flex;
-      gap: 4px;
-    }
-    .add-dish-line input {
-      flex: 1;
-      padding: 4px 8px;
-      font-size: 0.75rem;
-      border: 1px solid #CCC;
-      border-radius: 4px;
-    }
-    .add-dish-line button {
-      background: var(--primary-orange);
-      color: white;
-      border: none;
-      padding: 4px 10px;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-new-category {
-      width: 100%;
-      background: #E8F5E9;
-      color: #2E7D32;
-      border: 1.5px dashed #81C784;
-      padding: 8px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 6px;
-    }
-
-    /* 彈窗樣式 */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 999;
-    }
-    .modal-box {
-      background: white;
-      width: 100%;
-      max-width: 320px;
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    }
-    .modal-box h4 {
-      font-size: 1rem;
-      font-weight: 800;
-      color: #333;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-    .modal-box input {
-      width: 100%;
-      padding: 8px 10px;
-      font-size: 0.9rem;
-      border: 1.5px solid #DDD;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-    .modal-btns {
-      display: flex;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .modal-btns button {
-      flex: 1;
-      padding: 8px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-modal-confirm { background: var(--primary-orange); color: white; }
-    .btn-modal-cancel  { background: #EEEEEE; color: #555; }
+    .bento-stamps-bar { margin-top: 10px; padding-top: 9px; border-top: 1px dotted var(--border-color); display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 5px; align-items: center; }
+    .stamp-box { border-radius: 8px; padding: 4px 2px; text-align: center; font-weight: 700; }
+    .stamp-left { background: #FFF5EE; color: #C0392B; font-size: 0.68rem; line-height: 1.2; }
+    .stamp-mid { background: #F1F8F1; border: 1px solid #D4ECD5; padding: 3px 2px; }
+    .stamp-mid-top { font-size: 0.62rem; color: #4B6F44; line-height: 1.15; }
+    .stamp-mid-bot { font-size: 0.75rem; font-weight: 900; color: #1B5E20; line-height: 1.15; }
+    .stamp-right { background: #FFFDF0; color: #8D6E63; font-size: 0.68rem; line-height: 1.2; }
+    .visitor-lock-hint { font-size: 0.72rem; color: #8C7853; text-align: center; margin-top: 10px; }
   </style>
 </head>
 <body>
 
-  <!-- 頂部欄 -->
   <header>
     <div class="brand-logo">
-      <span style="font-size:1.4rem;">🥕</span>
-      <div>
-        <h1>健築家 健康五格自由砌</h1>
-        <div class="brand-tagline">五格自選自由砌 · 隨機餐單</div>
-      </div>
+      <span id="siteLogo" style="font-size:1.4rem;">🥕</span>
+      <h1 id="siteTitle">健築家 健康五格自由砌</h1>
     </div>
-    <button class="btn-admin-pill" id="authBtn" onclick="openLoginModal()">🔐 管理員登入</button>
+    <div class="cloud-status" id="cloudStatus">
+      <span>☁️</span> <span>已同步</span>
+    </div>
   </header>
 
-  <!-- 截圖提示文字橫額 -->
-  <div class="cap-notice-banner">
+  <div class="cap-notice-banner" id="siteNotice">
     📸 抽啱心水？歡迎直接截圖 (Cap 圖) 落單！
   </div>
 
-  <!-- 主操作按鈕 -->
   <div class="controls-wrapper">
     <button class="btn-draw-large" onclick="drawAllDishes()">
       <span>🎲</span> 隨機抽今日餐單！
@@ -489,17 +82,17 @@
     </button>
   </div>
 
-  <!-- 🍱 便當盒專區：手機一屏完整截圖卡片 -->
   <div class="bento-card" id="bentoCard">
     <div class="bento-header">
       <div class="bento-badge" id="bentoTitleBadge">🍱 五格自由砌 (共5品)</div>
-      <div class="bento-price-tag" id="bentoPriceTag">套餐：$58起</div>
+      <div class="bento-info-tag">
+        <div class="bento-price-tag" id="bentoPriceTag">套餐：$58起</div>
+        <div class="bento-calorie-tag" id="bentoCalorieTag" style="display:none;"></div>
+      </div>
     </div>
 
-    <!-- 自由格數展示區 -->
     <div class="slots-list" id="slotsList"></div>
 
-    <!-- 傳單底部三章橫排（無截斷） -->
     <div class="bento-stamps-bar">
       <div class="stamp-box stamp-left">
         🐷 100%<br>無激素肉源
@@ -515,133 +108,143 @@
   </div>
 
   <div class="visitor-lock-hint">
-    🔒 訪客模式：菜單與克數由店主鎖定，顧客抽籤後可直接截圖傳出！
-  </div>
-
-  <!-- 管理員後台控制面板 -->
-  <div class="admin-container" id="adminContainer" style="display:none;">
-    <div class="admin-head">
-      <h3>⚙️ 餐單管理後台（自訂項目與抽幾款）</h3>
-      <div style="display:flex; gap:6px;">
-        <button onclick="openChangePinModal()" style="background:#C62828; color:white; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;">🔑 改密碼</button>
-        <button onclick="logoutAdmin()" style="background:#555; color:white; border:none; padding:4px 8px; border-radius:6px; font-size:0.72rem; cursor:pointer;">登出</button>
-      </div>
-    </div>
-    
-    <div id="adminCategoryCards"></div>
-    <button class="btn-new-category" onclick="addNewCategory()">➕ 新增自訂分類項目 (例如：湯水/特飲/醬汁)</button>
-  </div>
-
-  <!-- 登入彈窗 (徹底移除重設密碼) -->
-  <div class="modal-backdrop" id="loginModal" style="display:none;">
-    <div class="modal-box">
-      <h4>🔐 管理員驗證</h4>
-      <input type="password" id="loginPinInput" placeholder="請輸入管理員 PIN 碼" onkeydown="if(event.key==='Enter') submitLogin()">
-      <div class="modal-btns">
-        <button class="btn-modal-cancel" onclick="closeModal('loginModal')">取消</button>
-        <button class="btn-modal-confirm" onclick="submitLogin()">解鎖登入</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 修改密碼專用彈窗 (必須驗證舊密碼) -->
-  <div class="modal-backdrop" id="pinModal" style="display:none;">
-    <div class="modal-box">
-      <h4>🔑 修改管理員 PIN 碼</h4>
-      <input type="password" id="oldPinInput" placeholder="請輸入現有舊密碼">
-      <input type="password" id="newPinInput" placeholder="請輸入新 PIN 碼 (最少4位)">
-      <input type="password" id="confirmPinInput" placeholder="再次確認新 PIN 碼">
-      <div class="modal-btns">
-        <button class="btn-modal-cancel" onclick="closeModal('pinModal')">取消</button>
-        <button class="btn-modal-confirm" onclick="submitChangePin()">儲存新密碼</button>
-      </div>
-    </div>
+    🔒 訪客模式：菜單由店主雲端同步，顧客抽籤後可直接截圖傳出！
   </div>
 
   <script>
-    // 預載「健築家」五格自由砌官方菜式及克數
-    const INITIAL_MENU_DATA = [
-      {
-        id: "cat_protein",
-        title: "蛋白質",
-        badgeClass: "lbl-protein",
-        pickCount: 1,
-        items: [
-          "麻辣雞髀肉 (~200g) ($63)",
-          "芥末雞胸 (~100g) ($66)",
-          "香草雞柳 (~100g) ($58)",
-          "醉橙鴨胸 (~100g) ($68)",
-          "豆腐咖喱 (~200g) ($58)",
-          "挪威三文魚(刁草檸檬) (~80g) ($68)"
-        ]
-      },
-      {
-        id: "cat_carb",
-        title: "碳水/蔬菜",
-        badgeClass: "lbl-carb",
-        pickCount: 1,
-        items: [
-          "藜麥飯 (~150g)",
-          "薑黃椰香飯 (~150g)",
-          "香烤南瓜 (~180g)",
-          "榴槤番薯 (~180g)",
-          "椰菜花 (~180g)",
-          "西蘭花 (~180g)"
-        ]
-      },
-      {
-        id: "cat_veggie",
-        title: "蔬菜(2款)",
-        badgeClass: "lbl-veggie",
-        pickCount: 2, // 抽取 2 款蔬菜，每款 50g
-        items: [
-          "西蘭花(檸檬橄欖油) (50g)",
-          "椰菜花(味噌) (50g)",
-          "豆類(蒜蓉) (50g)",
-          "什菌(焦糖洋蔥) (50g)",
-          "椰菜(蝦米) (50g)"
-        ]
-      },
-      {
-        id: "cat_side",
-        title: "小菜",
-        badgeClass: "lbl-side",
-        pickCount: 1,
-        items: [
-          "昆布漬蘿蔔 (2片)",
-          "麻藥蛋 (半隻)",
-          "熟蛋 (半隻)"
-        ]
-      }
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU-nsCAXl2JXcKafCqn-qLYDkHYbtZ9g4MMU4QBqeFO3ex0xQ5WjPzKDgiqgjAM02wID7FF16aoLbI/pub?output=csv";
+
+    const DEFAULT_CONFIG = {
+      title: "健築家 健康五格自由砌",
+      logo: "🥕",
+      notice: "📸 抽啱心水？歡迎直接截圖 (Cap 圖) 落單！"
+    };
+
+    const DEFAULT_MENU_DATA = [
+      { id: "cat_protein", title: "蛋白質", badgeClass: "lbl-protein", pickCount: 1, items: ["麻辣雞髀肉 (~200g) ($63)", "芥末雞胸 (~100g) ($66)", "香草雞柳 (~100g) ($58)", "醉橙鴨胸 (~100g) ($68)", "豆腐咖喱 (~200g) ($58)", "挪威三文魚(刁草檸檬) (~80g) ($68)"] },
+      { id: "cat_carb", title: "碳水/蔬菜", badgeClass: "lbl-carb", pickCount: 1, items: ["藜麥飯 (~150g)", "薑黃椰香飯 (~150g)", "香烤南瓜 (~180g)", "榴槤番薯 (~180g)", "椰菜花 (~180g)", "西蘭花 (~180g)"] },
+      { id: "cat_veggie", title: "蔬菜(2款)", badgeClass: "lbl-veggie", pickCount: 2, items: ["西蘭花(檸檬橄欖油) (50g)", "椰菜花(味噌) (50g)", "豆類(蒜蓉) (50g)", "什菌(焦糖洋蔥) (50g)", "椰菜(蝦米) (50g)"] },
+      { id: "cat_side", title: "小菜", badgeClass: "lbl-side", pickCount: 1, items: ["昆布漬蘿蔔 (2片)", "麻藥蛋 (一隻)", "熟蛋 (半隻)"] }
     ];
 
-    let menuData = [];
+    let siteConfig = { ...DEFAULT_CONFIG };
+    let menuData = [...DEFAULT_MENU_DATA];
     let pickedResults = {};
-    let isAdmin = false;
-    let ADMIN_PIN = "8888";
 
-    function init() {
-      const saved = localStorage.getItem("jzj_menu_v5");
-      menuData = saved ? JSON.parse(saved) : INITIAL_MENU_DATA;
-
-      const savedPin = localStorage.getItem("jzj_pin_v5");
-      if (savedPin) ADMIN_PIN = savedPin;
-
+    async function init() {
+      const cached = localStorage.getItem("jzj_gsheet_cache");
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          if (parsed.menu) menuData = parsed.menu;
+          if (parsed.config) siteConfig = parsed.config;
+        } catch(e) {}
+      }
+      applyConfig();
       renderBento();
+
+      if (GOOGLE_SHEET_CSV_URL) {
+        await fetchGoogleSheetData();
+      }
     }
 
-    // 渲染便當盒中的項目
+    async function fetchGoogleSheetData() {
+      const statusEl = document.getElementById("cloudStatus");
+      try {
+        const res = await fetch(GOOGLE_SHEET_CSV_URL + "&_t=" + Date.now());
+        if (!res.ok) throw new Error("讀取失敗");
+        const csvText = await res.text();
+        parseCSV(csvText);
+
+        localStorage.setItem("jzj_gsheet_cache", JSON.stringify({ config: siteConfig, menu: menuData }));
+        applyConfig();
+        renderBento();
+        statusEl.innerHTML = `<span>☁️</span> <span>已同步最新</span>`;
+      } catch (e) {
+        statusEl.innerHTML = `<span>☁️️</span> <span>離線菜單</span>`;
+      }
+    }
+
+    function parseCSV(csvText) {
+      const lines = csvText.split(/\r?\n/).filter(line => line.trim().length > 0);
+      if (lines.length <= 1) return;
+
+      const map = {};
+      const catOrder = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(",");
+        if (parts.length < 2) continue;
+
+        const colA = parts[0].replace(/^["']|["']$/g, '').trim();
+        const colB = parts.slice(1).join(",").replace(/^["']|["']$/g, '').trim();
+
+        if (!colA || !colB) continue;
+
+        if (colA === "店舖名稱" || colA === "店名") {
+          siteConfig.title = colB;
+          continue;
+        } else if (colA === "店舖圖標" || colA === "Logo" || colA === "logo") {
+          siteConfig.logo = colB;
+          continue;
+        } else if (colA === "宣傳標語" || colA === "提示") {
+          siteConfig.notice = colB;
+          continue;
+        }
+
+        if (!map[colA]) {
+          map[colA] = [];
+          catOrder.push(colA);
+        }
+        map[colA].push(colB);
+      }
+
+      if (catOrder.length > 0) {
+        menuData = catOrder.map(name => {
+          let pickCount = 1;
+          let badgeClass = "lbl-custom";
+
+          const matchCount = name.match(/\((\d+)款\)/) || name.match(/\((\d+)份\)/);
+          if (matchCount) {
+            pickCount = parseInt(matchCount[1], 10);
+          } else if (name.includes("兩款") || name.includes("2款")) {
+            pickCount = 2;
+          }
+
+          if (name.includes("蛋白質") || name.includes("肉")) badgeClass = "lbl-protein";
+          else if (name.includes("碳水") || name.includes("飯")) badgeClass = "lbl-carb";
+          else if (name.includes("蔬菜")) badgeClass = "lbl-veggie";
+          else if (name.includes("小菜") || name.includes("蛋")) badgeClass = "lbl-side";
+
+          return {
+            id: "cat_" + encodeURIComponent(name),
+            title: name,
+            badgeClass: badgeClass,
+            pickCount: pickCount,
+            items: map[name]
+          };
+        });
+      }
+    }
+
+    function applyConfig() {
+      document.title = siteConfig.title;
+      document.getElementById("siteTitle").innerText = siteConfig.title;
+      document.getElementById("siteLogo").innerText = siteConfig.logo;
+      document.getElementById("siteNotice").innerText = siteConfig.notice;
+    }
+
     function renderBento() {
       const container = document.getElementById("slotsList");
       container.innerHTML = "";
-
       let totalPicks = 0;
       let calculatedPrice = null;
+      let totalCalories = 0;
+      let hasCalories = false;
 
       menuData.forEach((cat) => {
         totalPicks += cat.pickCount;
         const picked = pickedResults[cat.id] || [];
-
         const row = document.createElement("div");
         row.className = "slot-row";
 
@@ -650,9 +253,18 @@
           contentHtml = `<div class="slot-dish-item empty">請按上方按鈕隨機抽取</div>`;
         } else {
           contentHtml = picked.map((dish, i) => {
-            // 嘗試偵測金額 (例如 $63)
+            // 偵測價格
             const matchPrice = dish.match(/\$(\d+)/);
-            if (matchPrice && cat.id === 'cat_protein') calculatedPrice = matchPrice[1];
+            if (matchPrice && (cat.title.includes('蛋白質') || cat.badgeClass === 'lbl-protein')) {
+              calculatedPrice = matchPrice[1];
+            }
+
+            // 智能偵測卡路里: 支援 (320kcal) / (320卡) / 320 kcal
+            const matchCal = dish.match(/(\d+)\s*(kcal|卡|cal)/i);
+            if (matchCal) {
+              totalCalories += parseInt(matchCal[1], 10);
+              hasCalories = true;
+            }
 
             return `
               <div class="slot-dish-item">
@@ -664,35 +276,34 @@
         }
 
         row.innerHTML = `
-          <div class="slot-label ${cat.badgeClass || 'lbl-custom'}">${cat.title}</div>
+          <div class="slot-label ${cat.badgeClass}">${cat.title}</div>
           <div class="slot-dish-list">${contentHtml}</div>
           <button class="btn-reroll-cat" onclick="rerollCategory('${cat.id}')" title="單獨重抽呢格">🔄</button>
         `;
         container.appendChild(row);
       });
 
-      // 更新頂部品數標籤與價格
       document.getElementById("bentoTitleBadge").innerText = `🍱 五格自由砌 (共${totalPicks}品)`;
-      if (calculatedPrice) {
-        document.getElementById("bentoPriceTag").innerText = `套餐總價：$${calculatedPrice}`;
+      document.getElementById("bentoPriceTag").innerText = calculatedPrice ? `套餐總價：$${calculatedPrice}` : `套餐：$58起`;
+
+      // 顯示總卡路里
+      const calTag = document.getElementById("bentoCalorieTag");
+      if (hasCalories && totalCalories > 0) {
+        calTag.style.display = "block";
+        calTag.innerText = `🔥 總卡路里：約 ${totalCalories} kcal`;
       } else {
-        document.getElementById("bentoPriceTag").innerText = `套餐：$58起`;
+        calTag.style.display = "none";
       }
     }
 
-    // 全部隨機抽取
     function drawAllDishes() {
       menuData.forEach(cat => {
         pickedResults[cat.id] = pickRandomDishes(cat.items, cat.pickCount);
       });
       renderBento();
-
-      if (typeof confetti === 'function') {
-        confetti({ particleCount: 50, spread: 60, origin: { y: 0.3 } });
-      }
+      if (typeof confetti === 'function') confetti({ particleCount: 50, spread: 60, origin: { y: 0.3 } });
     }
 
-    // 單一分類重抽
     function rerollCategory(catId) {
       const cat = menuData.find(c => c.id === catId);
       if (!cat) return;
@@ -706,189 +317,26 @@
       return shuffled.slice(0, Math.min(count, items.length));
     }
 
-    // 複製餐單文字
     function copyMenuText() {
-      let text = "🍱 健築家·今日五格自由砌落單：\n";
+      let text = `🍱 ${siteConfig.title}·今日落單：\n`;
       let hasItem = false;
+      let totalCalories = 0;
 
       menuData.forEach(cat => {
         const picked = pickedResults[cat.id];
         if (picked && picked.length > 0) {
           hasItem = true;
           text += `▪️ ${cat.title}：${picked.join(" ＋ ")}\n`;
+          picked.forEach(dish => {
+            const matchCal = dish.match(/(\d+)\s*(kcal|卡|cal)/i);
+            if (matchCal) totalCalories += parseInt(matchCal[1], 10);
+          });
         }
       });
+      if (!hasItem) { alert("請先撳「🎲 隨機抽今日餐單！」抽取菜式！"); return; }
+      if (totalCalories > 0) text += `🔥 總卡路里：約 ${totalCalories} kcal\n`;
 
-      if (!hasItem) {
-        alert("請先撳「🎲 隨機抽今日餐單！」抽取菜式！");
-        return;
-      }
-
-      navigator.clipboard.writeText(text).then(() => {
-        alert("✅ 餐單文字已複製到剪貼簿！可直接傳給朋友或店主！");
-      });
-    }
-
-    /* ---- 管理員後台邏輯 ---- */
-    function openLoginModal() {
-      if (isAdmin) {
-        logoutAdmin();
-      } else {
-        document.getElementById("loginPinInput").value = "";
-        document.getElementById("loginModal").style.display = "flex";
-        setTimeout(() => document.getElementById("loginPinInput").focus(), 100);
-      }
-    }
-
-    function submitLogin() {
-      const pin = document.getElementById("loginPinInput").value.trim();
-      if (pin === ADMIN_PIN) {
-        isAdmin = true;
-        closeModal("loginModal");
-        document.getElementById("authBtn").textContent = "🚪 登出鎖定";
-        document.getElementById("adminContainer").style.display = "block";
-        renderAdmin();
-      } else {
-        alert("❌ PIN 碼錯誤！只有店主可以解鎖。");
-      }
-    }
-
-    function logoutAdmin() {
-      isAdmin = false;
-      document.getElementById("authBtn").textContent = "🔐 管理員登入";
-      document.getElementById("adminContainer").style.display = "none";
-    }
-
-    function openChangePinModal() {
-      document.getElementById("oldPinInput").value = "";
-      document.getElementById("newPinInput").value = "";
-      document.getElementById("confirmPinInput").value = "";
-      document.getElementById("pinModal").style.display = "flex";
-    }
-
-    function submitChangePin() {
-      const oldPin = document.getElementById("oldPinInput").value.trim();
-      const newPin = document.getElementById("newPinInput").value.trim();
-      const confirmPin = document.getElementById("confirmPinInput").value.trim();
-
-      if (oldPin !== ADMIN_PIN) {
-        alert("❌ 現有舊密碼輸入錯誤！");
-        return;
-      }
-      if (newPin.length < 4) {
-        alert("⚠️ 新 PIN 碼長度最少需要 4 位數！");
-        return;
-      }
-      if (newPin !== confirmPin) {
-        alert("⚠️ 兩次輸入的新密碼不一致！");
-        return;
-      }
-
-      ADMIN_PIN = newPin;
-      localStorage.setItem("jzj_pin_v5", ADMIN_PIN);
-      alert("✅ PIN 碼已成功修改！請記住新密碼。");
-      closeModal("pinModal");
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).style.display = "none";
-    }
-
-    // 渲染管理員分類編輯器
-    function renderAdmin() {
-      const container = document.getElementById("adminCategoryCards");
-      container.innerHTML = "";
-
-      menuData.forEach((cat, cIdx) => {
-        const card = document.createElement("div");
-        card.className = "cat-admin-card";
-
-        const tagsHtml = cat.items.map((item, iIdx) => `
-          <span class="dish-tag">
-            ${item}
-            <button onclick="removeDish(${cIdx}, ${iIdx})" title="刪除">✕</button>
-          </span>
-        `).join("");
-
-        card.innerHTML = `
-          <div class="cat-admin-top">
-            <strong>${cat.title}</strong>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <label style="font-size:0.75rem;">抽幾款：
-                <select class="select-pick-count" onchange="changePickCount(${cIdx}, this.value)">
-                  <option value="1" ${cat.pickCount === 1 ? 'selected' : ''}>1 款</option>
-                  <option value="2" ${cat.pickCount === 2 ? 'selected' : ''}>2 款</option>
-                  <option value="3" ${cat.pickCount === 3 ? 'selected' : ''}>3 款</option>
-                  <option value="4" ${cat.pickCount === 4 ? 'selected' : ''}>4 款</option>
-                </select>
-              </label>
-              <button onclick="deleteCategory(${cIdx})" style="background:none; border:none; color:#C62828; cursor:pointer;" title="刪除整個類別">🗑️</button>
-            </div>
-          </div>
-          <div class="dish-tag-list">${tagsHtml}</div>
-          <div class="add-dish-line">
-            <input type="text" id="input_dish_${cat.id}" placeholder="輸入新菜式名及克數 (如: 蘆筍 (50g))" onkeydown="if(event.key==='Enter') addDish(${cIdx})">
-            <button onclick="addDish(${cIdx})">＋加入</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function changePickCount(cIdx, val) {
-      menuData[cIdx].pickCount = parseInt(val, 10);
-      saveData();
-      renderBento();
-    }
-
-    function addDish(cIdx) {
-      const cat = menuData[cIdx];
-      const input = document.getElementById(`input_dish_${cat.id}`);
-      const val = input.value.trim();
-      if (!val) return;
-      cat.items.push(val);
-      input.value = "";
-      saveData();
-      renderAdmin();
-      renderBento();
-    }
-
-    function removeDish(cIdx, iIdx) {
-      menuData[cIdx].items.splice(iIdx, 1);
-      saveData();
-      renderAdmin();
-      renderBento();
-    }
-
-    function addNewCategory() {
-      const name = prompt("請輸入新增分類名稱（例如：健康湯水、特製醬汁）：");
-      if (!name || !name.trim()) return;
-
-      const newId = "cat_" + Date.now();
-      menuData.push({
-        id: newId,
-        title: name.trim(),
-        badgeClass: "lbl-custom",
-        pickCount: 1,
-        items: []
-      });
-
-      saveData();
-      renderAdmin();
-      renderBento();
-    }
-
-    function deleteCategory(cIdx) {
-      if (confirm(`確定要刪除「${menuData[cIdx].title}」整個分類項目嗎？`)) {
-        menuData.splice(cIdx, 1);
-        saveData();
-        renderAdmin();
-        renderBento();
-      }
-    }
-
-    function saveData() {
-      localStorage.setItem("jzj_menu_v5", JSON.stringify(menuData));
+      navigator.clipboard.writeText(text).then(() => alert("✅ 餐單文字已複製到剪貼簿！"));
     }
 
     init();
