@@ -170,6 +170,10 @@
       color: var(--primary-red);
       font-weight: 800;
       font-size: 1rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 4px;
     }
     .cal-text {
       font-size: 0.75rem;
@@ -400,8 +404,8 @@
 </div>
 
 <script>
-  // 你提供嘅最新 Google Sheets CSV 網址（已修正協議為小寫 https）
-  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU-nsCAXl2JXcKafCqn-qLYDkHYbtZ9g4MMU4QBqeFO3ex0xQ5WjPzKDgiqgjAM02wID7FF16aoLbI/pub?output=csv";
+  // Google Sheets CSV 官方發佈網址
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU-nsCAXI2JXcKafCqn-qLYDkHYbtZ9g4MMU4QBqeFO3ex0xQ5WjPzKDgiqgjAM02wID7FF16aoLbl/pub?output=csv";
 
   let menuData = {
     protein: [],
@@ -442,7 +446,6 @@
       const parts = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
       if (parts.length < 2) continue;
 
-      // 自動去除多餘空格與引號，保證匹配最準確
       const category = parts[0].replace(/["\s]/g, '');
       const content = parts[1].replace(/^"|"$/g, '').trim();
 
@@ -578,6 +581,7 @@
     if (currentSelection.veg2) totalKcal += extractKcal(currentSelection.veg2);
     if (currentSelection.side) totalKcal += extractKcal(currentSelection.side);
 
+    // 計算追加項目金額
     let extraPrice = 0;
     document.querySelectorAll('input[name="extra_sauce"]:checked, input[name="extra_drink"]:checked').forEach(cb => {
       extraPrice += extractPrice(cb.value);
@@ -585,7 +589,16 @@
     });
 
     const finalPrice = basePrice + extraPrice;
-    document.getElementById("total-price").innerText = currentSelection.protein ? `套餐總價: $${finalPrice}` : `套餐: $58起`;
+    
+    // 如果有勾選追加項目，即時顯示包含加配金額標註
+    const extraTag = extraPrice > 0 ? ` <span style="font-size: 0.8rem; font-weight: normal; color: #64748b;">(含追加+$${extraPrice})</span>` : '';
+
+    if (currentSelection.protein) {
+      document.getElementById("total-price").innerHTML = `套餐總價: $${finalPrice}${extraTag}`;
+    } else {
+      document.getElementById("total-price").innerHTML = extraPrice > 0 ? `套餐: $${58 + extraPrice}${extraTag}` : `套餐: $58起`;
+    }
+
     document.getElementById("total-cal").innerText = `🔥 總卡路里: 約 ${totalKcal} kcal`;
   }
 
