@@ -92,4 +92,531 @@
       padding: 8px 12px;
       text-align: center;
       font-size: 0.85rem;
-      color: #
+      color: #795548;
+      font-weight: 500;
+    }
+
+    /* 按鈕區 */
+    .action-row {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-draw {
+      flex: 1.6;
+      background: var(--primary-red);
+      color: #ffffff;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(192, 57, 43, 0.25);
+      transition: background-color 0.2s;
+    }
+    .btn-draw:hover {
+      background: var(--btn-hover);
+    }
+    .btn-copy {
+      flex: 1;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      border-radius: 25px;
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    /* 主餐點卡片 */
+    .main-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 10px;
+    }
+    .card-title-pill {
+      background: #e2e8f0;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+    }
+    .price-calories {
+      text-align: right;
+    }
+    .price-text {
+      color: var(--primary-red);
+      font-weight: 800;
+      font-size: 1rem;
+    }
+    .cal-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* 抽籤項目列表 */
+    .slot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .slot-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fafafa;
+      padding: 8px 10px;
+      border-radius: 10px;
+    }
+    .category-badge {
+      width: 72px;
+      text-align: center;
+      padding: 6px 4px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .badge-protein { background: var(--badge-protein); color: var(--badge-protein-text); }
+    .badge-staple { background: var(--badge-staple); color: var(--badge-staple-text); }
+    .badge-veg { background: var(--badge-veg); color: var(--badge-veg-text); }
+    .badge-side { background: var(--badge-side); color: var(--badge-side-text); }
+
+    .slot-content {
+      flex: 1;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+    .slot-subtag {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin-left: 4px;
+    }
+    .btn-reroll-item {
+      background: transparent;
+      border: none;
+      color: #3b82f6;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 4px;
+    }
+
+    /* 追加方框（醬汁同飲品各自獨立） */
+    .extra-card {
+      background: var(--extra-bg);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .extra-label {
+      width: 80px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #475569;
+      text-align: center;
+      padding: 4px 0;
+      flex-shrink: 0;
+      border-right: 1px solid #e2e8f0;
+    }
+    .extra-options {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sauce-option-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      line-height: 1.35;
+      padding: 2px 0;
+      user-select: none;
+    }
+    .sauce-option-item input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: #3b82f6;
+    }
+    .option-text {
+      flex: 1;
+    }
+    .optional-tag {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      font-weight: normal;
+    }
+
+    /* 底部賣點（4格自適應平均分佈） */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .feature-item {
+      background: #fafafa;
+      border-radius: 8px;
+      padding: 6px 2px;
+      text-align: center;
+      font-size: 0.65rem;
+      color: #475569;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 頂部標頭 -->
+  <div class="header-card">
+    <div class="brand-box">
+      <img id="store-logo" class="brand-logo" src="https://raw.githubusercontent.com/healthprint/5-compartment-bento-box/main/logo" alt="Logo" onerror="this.style.display='none'">
+      <div id="store-name" class="brand-name">健築家 健康五格自由砌</div>
+    </div>
+    <div class="status-badge">🥬 已同步最新</div>
+  </div>
+
+  <!-- 宣傳標語 -->
+  <div id="promo-text" class="slogan-card">
+    📷 抽啱心水？歡迎直接截圖 (Cap 圖) 落單！
+  </div>
+
+  <!-- 按鈕區 -->
+  <div class="action-row">
+    <button class="btn-draw" id="btn-draw" onclick="drawAll()">🎲 隨機抽今日餐單！</button>
+    <button class="btn-copy" onclick="copyResult()">📋 複製文字</button>
+  </div>
+
+  <!-- 主餐單卡片 -->
+  <div class="main-card">
+    <div class="card-top">
+      <div class="card-title-pill">🍱 五格自由砌 (共5品)</div>
+      <div class="price-calories">
+        <div id="total-price" class="price-text">套餐：$58起</div>
+        <div id="total-cal" class="cal-text">🔥 總卡路里：約 0 kcal</div>
+      </div>
+    </div>
+
+    <!-- 隨機抽項目 -->
+    <div class="slot-list">
+      <div class="slot-row">
+        <div class="category-badge badge-protein">蛋白質</div>
+        <div class="slot-content" id="slot-protein">請按上方按鈕隨機抽取</div>
+        <button class="btn-reroll-item" onclick="rerollSingle('蛋白質')">🔄</button>
+      </div>
+
+      <div class="slot-row">
+        <div class="category-badge badge-staple">主食</div>
+        <div class="slot-content" id="slot-staple">請按上方按鈕隨機抽取</div>
+        <button class="btn-reroll-item" onclick="rerollSingle('主食')">🔄</button>
+      </div>
+
+      <div class="slot-row">
+        <div class="category-badge badge-veg">蔬菜(2款)</div>
+        <div class="slot-content" id="slot-veg">請按上方按鈕隨機抽取</div>
+        <button class="btn-reroll-item" onclick="rerollSingle('蔬菜')">🔄</button>
+      </div>
+
+      <div class="slot-row">
+        <div class="category-badge badge-side">小菜</div>
+        <div class="slot-content" id="slot-side">請按上方按鈕隨機抽取</div>
+        <button class="btn-reroll-item" onclick="rerollSingle('小菜')">🔄</button>
+      </div>
+    </div>
+
+    <!-- 追加秘製醬汁獨立方框 -->
+    <div class="extra-card">
+      <div class="extra-label">追加秘製醬汁</div>
+      <div class="extra-options" id="sauce-list">載入中...</div>
+    </div>
+
+    <!-- 追加飲品獨立方框 -->
+    <div class="extra-card">
+      <div class="extra-label">追加飲品</div>
+      <div class="extra-options" id="drink-list">載入中...</div>
+    </div>
+
+    <!-- 底部特點列（4款） -->
+    <div class="features-grid">
+      <div class="feature-item">
+        🥩 100%<br>無激素肉源
+      </div>
+      <div class="feature-item">
+        🌿 低鹽·低糖·少油<br>⏳ 0添加味精
+      </div>
+      <div class="feature-item">
+        🥚 嚴選<br>日本雞蛋
+      </div>
+      <div class="feature-item">
+        🌾 嚴選<br>採用珍珠米
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    🔒 訪客模式：菜單由店主雲端同步，顧客抽籤後可直接截圖傳出！
+  </div>
+</div>
+
+<script>
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU-nsCAXI2JXcKafCqn-qLYDkHYbtZ9g4MMU4QBqeFO3ex0xQ5WjPzKDgiqgjAM02wID7FF16aoLbl/pub?output=csv";
+
+  let menuData = {
+    protein: [],
+    staple: [],
+    veg: [],
+    side: [],
+    sauce: [],
+    drink: []
+  };
+
+  let currentSelection = {
+    protein: null,
+    staple: null,
+    veg1: null,
+    veg2: null,
+    side: null
+  };
+
+  async function fetchMenu() {
+    try {
+      const response = await fetch(CSV_URL);
+      const text = await response.text();
+      parseCSV(text);
+      renderOptions();
+    } catch (e) {
+      console.error("載入菜單失敗", e);
+    }
+  }
+
+  function parseCSV(text) {
+    const lines = text.split(/\r?\n/);
+    menuData = { protein: [], staple: [], veg: [], side: [], sauce: [], drink: [] };
+
+    for (let i = 1; i < lines.length; i++) {
+      const row = lines[i].trim();
+      if (!row) continue;
+      
+      const parts = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+      if (parts.length < 2) continue;
+
+      const category = parts[0].replace(/^"|"$/g, '').trim();
+      const content = parts[1].replace(/^"|"$/g, '').trim();
+
+      if (category === "蛋白質") menuData.protein.push(content);
+      else if (category === "主食") menuData.staple.push(content);
+      else if (category.includes("蔬菜")) menuData.veg.push(content);
+      else if (category === "小菜") menuData.side.push(content);
+      else if (category.includes("醬汁")) menuData.sauce.push(content);
+      else if (category.includes("飲品")) menuData.drink.push(content);
+      else if (category === "店舖名稱") {
+        const el = document.getElementById("store-name");
+        if (el) el.innerText = content;
+      } else if (category === "宣傳標語") {
+        const el = document.getElementById("promo-text");
+        if (el) el.innerText = content;
+      }
+    }
+  }
+
+  function renderOptions() {
+    // 渲染醬汁
+    const sauceContainer = document.getElementById("sauce-list");
+    if (sauceContainer) {
+      if (menuData.sauce.length === 0) {
+        sauceContainer.innerHTML = '<span style="font-size:0.75rem;color:#94a3b8;">暫無醬汁</span>';
+      } else {
+        sauceContainer.innerHTML = menuData.sauce.map((s) => `
+          <label class="sauce-option-item">
+            <input type="checkbox" name="extra_sauce" value="${s}" onchange="calculateSummary()">
+            <span class="option-text">${s}</span>
+            <span class="optional-tag">可剔選</span>
+          </label>
+        `).join('');
+      }
+    }
+
+    // 渲染飲品
+    const drinkContainer = document.getElementById("drink-list");
+    if (drinkContainer) {
+      if (menuData.drink.length === 0) {
+        drinkContainer.innerHTML = '<span style="font-size:0.75rem;color:#94a3b8;">暫無飲品</span>';
+      } else {
+        drinkContainer.innerHTML = menuData.drink.map((d) => `
+          <label class="sauce-option-item">
+            <input type="checkbox" name="extra_drink" value="${d}" onchange="calculateSummary()">
+            <span class="option-text">${d}</span>
+            <span class="optional-tag">可剔選</span>
+          </label>
+        `).join('');
+      }
+    }
+  }
+
+  function getRandom(arr, exclude = null) {
+    const valid = arr.filter(item => item !== exclude);
+    if (!valid.length) return arr[0] || "";
+    return valid[Math.floor(Math.random() * valid.length)];
+  }
+
+  function drawAll() {
+    if (menuData.protein.length) currentSelection.protein = getRandom(menuData.protein);
+    if (menuData.staple.length) currentSelection.staple = getRandom(menuData.staple);
+    if (menuData.veg.length) {
+      currentSelection.veg1 = getRandom(menuData.veg);
+      currentSelection.veg2 = getRandom(menuData.veg, currentSelection.veg1);
+    }
+    if (menuData.side.length) currentSelection.side = getRandom(menuData.side);
+
+    updateDisplay();
+    calculateSummary();
+
+    if (typeof confetti === 'function') {
+      confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+    }
+  }
+
+  function rerollSingle(type) {
+    if (type === '蛋白質' && menuData.protein.length) {
+      currentSelection.protein = getRandom(menuData.protein, currentSelection.protein);
+    } else if (type === '主食' && menuData.staple.length) {
+      currentSelection.staple = getRandom(menuData.staple, currentSelection.staple);
+    } else if (type === '蔬菜' && menuData.veg.length) {
+      currentSelection.veg1 = getRandom(menuData.veg, currentSelection.veg1);
+      currentSelection.veg2 = getRandom(menuData.veg, currentSelection.veg1);
+    } else if (type === '小菜' && menuData.side.length) {
+      currentSelection.side = getRandom(menuData.side, currentSelection.side);
+    }
+    updateDisplay();
+    calculateSummary();
+  }
+
+  function updateDisplay() {
+    if (currentSelection.protein) {
+      document.getElementById("slot-protein").innerText = currentSelection.protein;
+    }
+    if (currentSelection.staple) {
+      document.getElementById("slot-staple").innerText = currentSelection.staple;
+    }
+    if (currentSelection.veg1 && currentSelection.veg2) {
+      document.getElementById("slot-veg").innerHTML = `
+        <div>• ${currentSelection.veg1} <span class="slot-subtag">(第1款)</span></div>
+        <div>• ${currentSelection.veg2} <span class="slot-subtag">(第2款)</span></div>
+      `;
+    }
+    if (currentSelection.side) {
+      document.getElementById("slot-side").innerText = currentSelection.side;
+    }
+  }
+
+  function extractPrice(str) {
+    if (!str) return 0;
+    const match = str.match(/\(\+\$?(\d+)\)/) || str.match(/\(\$?(\d+)\)/);
+    return match ? parseInt(match[1]) : 0;
+  }
+
+  function extractKcal(str) {
+    if (!str) return 0;
+    const match = str.match(/(\d+)\s*kcal/i);
+    return match ? parseInt(match[1]) : 0;
+  }
+
+  function calculateSummary() {
+    let totalKcal = 0;
+    let basePrice = 58;
+
+    if (currentSelection.protein) {
+      totalKcal += extractKcal(currentSelection.protein);
+      const proteinPrice = extractPrice(currentSelection.protein);
+      if (proteinPrice > basePrice) basePrice = proteinPrice;
+    }
+    if (currentSelection.staple) totalKcal += extractKcal(currentSelection.staple);
+    if (currentSelection.veg1) totalKcal += extractKcal(currentSelection.veg1);
+    if (currentSelection.veg2) totalKcal += extractKcal(currentSelection.veg2);
+    if (currentSelection.side) totalKcal += extractKcal(currentSelection.side);
+
+    let extraPrice = 0;
+    document.querySelectorAll('input[name="extra_sauce"]:checked, input[name="extra_drink"]:checked').forEach(cb => {
+      extraPrice += extractPrice(cb.value);
+      totalKcal += extractKcal(cb.value);
+    });
+
+    const finalPrice = basePrice + extraPrice;
+    document.getElementById("total-price").innerText = currentSelection.protein ? `套餐總價: $${finalPrice}` : `套餐: $58起`;
+    document.getElementById("total-cal").innerText = `🔥 總卡路里: 約 ${totalKcal} kcal`;
+  }
+
+  function copyResult() {
+    if (!currentSelection.protein) {
+      alert("請先抽取餐單！");
+      return;
+    }
+
+    const checkedSauces = Array.from(document.querySelectorAll('input[name="extra_sauce"]:checked')).map(c => c.value);
+    const checkedDrinks = Array.from(document.querySelectorAll('input[name="extra_drink"]:checked')).map(c => c.value);
+
+    let text = `🍱 健築家 五格自由砌餐單\n`;
+    text += `-------------------------\n`;
+    text += `【蛋白質】${currentSelection.protein}\n`;
+    text += `【主食】${currentSelection.staple}\n`;
+    text += `【蔬菜】${currentSelection.veg1} + ${currentSelection.veg2}\n`;
+    text += `【小菜】${currentSelection.side}\n`;
+    if (checkedSauces.length) text += `【追加醬汁】${checkedSauces.join(', ')}\n`;
+    if (checkedDrinks.length) text += `【追加飲品】${checkedDrinks.join(', ')}\n`;
+    text += `-------------------------\n`;
+    text += `${document.getElementById("total-price").innerText}\n`;
+    text += `${document.getElementById("total-cal").innerText}`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      alert("餐單內容已成功複製到剪貼簿！");
+    }).catch(() => {
+      alert("複製失敗，請手動截圖。");
+    });
+  }
+
+  window.onload = fetchMenu;
+</script>
+
+</body>
+</html>
