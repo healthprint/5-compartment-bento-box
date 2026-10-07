@@ -400,6 +400,7 @@
 </div>
 
 <script>
+  // 你提供嘅最新 Google Sheets CSV 網址（已修正協議為小寫 https）
   const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRU-nsCAXI2JXcKafCqn-qLYDkHYbtZ9g4MMU4QBqeFO3ex0xQ5WjPzKDgiqgjAM02wID7FF16aoLbl/pub?output=csv";
 
   let menuData = {
@@ -441,19 +442,20 @@
       const parts = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
       if (parts.length < 2) continue;
 
-      const category = parts[0].replace(/^"|"$/g, '').trim();
+      // 自動去除多餘空格與引號，保證匹配最準確
+      const category = parts[0].replace(/["\s]/g, '');
       const content = parts[1].replace(/^"|"$/g, '').trim();
 
-      if (category === "蛋白質") menuData.protein.push(content);
-      else if (category === "主食") menuData.staple.push(content);
-      else if (category.includes("蔬菜")) menuData.veg.push(content);
-      else if (category === "小菜") menuData.side.push(content);
-      else if (category.includes("醬汁")) menuData.sauce.push(content);
-      else if (category.includes("飲品")) menuData.drink.push(content);
-      else if (category === "店舖名稱") {
+      if (category.indexOf("蛋白質") !== -1) menuData.protein.push(content);
+      else if (category.indexOf("主食") !== -1) menuData.staple.push(content);
+      else if (category.indexOf("蔬菜") !== -1) menuData.veg.push(content);
+      else if (category.indexOf("小菜") !== -1) menuData.side.push(content);
+      else if (category.indexOf("醬") !== -1 || category.indexOf("汁") !== -1) menuData.sauce.push(content);
+      else if (category.indexOf("飲") !== -1 || category.indexOf("茶") !== -1) menuData.drink.push(content);
+      else if (category.indexOf("店舖名稱") !== -1) {
         const el = document.getElementById("store-name");
         if (el) el.innerText = content;
-      } else if (category === "宣傳標語") {
+      } else if (category.indexOf("宣傳標語") !== -1) {
         const el = document.getElementById("promo-text");
         if (el) el.innerText = content;
       }
